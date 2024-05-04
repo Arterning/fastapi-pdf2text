@@ -7,6 +7,22 @@
 
 ## Local Development
 
+* Start Local Development
+
+```bash
+poetry install
+poetry run uvicorn main:app --reload
+```
+
+* If you want to install some dependencies
+
+```bash
+poetry shell
+poetry add "paddleocr>=2.0.1"
+poetry add paddlepaddle
+```
+
+
 * Start the stack with Docker Compose:
 
 ```bash
