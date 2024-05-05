@@ -188,6 +188,8 @@ export const sendRequest = async <T>(
 		signal: controller.signal,
 		url,
 		withCredentials: config.WITH_CREDENTIALS,
+		onUploadProgress: options.onUploadProgress,
+		onDownloadProgress: options.onDownloadProgress,
 	};
 
 	onCancel(() => controller.abort());

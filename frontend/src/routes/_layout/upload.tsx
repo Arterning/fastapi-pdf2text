@@ -16,8 +16,9 @@ import { useForm } from "react-hook-form";
 import { FiFile } from "react-icons/fi";
 import FileUpload from "../../components/file-upload";
 import { request } from "../../client/core/request";
-import React from "react";
+import React, { useState } from "react";
 import useCustomToast from "../../hooks/useCustomToast";
+import { AxiosProgressEvent } from "axios";
 
 export const Route = createFileRoute("/_layout/upload")({
   component: UploadPage,
@@ -29,7 +30,8 @@ type FormValues = {
 
 function UploadPage() {
 
-  const [uploading, setUploading] = React.useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [progress, setProgress] = useState(0);
 
   const showToast = useCustomToast();
 
