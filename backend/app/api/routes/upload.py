@@ -17,7 +17,7 @@ from app.api.deps import CurrentUser, SessionDep
 @router.post("/pdf/", response_model=ItemPublic)
 async def create_files(*, session: SessionDep, current_user: CurrentUser, file: UploadFile = File(...)):
     filename = str(time.time()) + "_" + file.filename
-    path = 'C:/Users/china/working/course-group/ocr-examples'
+    path = 'D:/tmp/'
     localUrl = path + filename
     if not os.path.exists(path):
         os.mkdir(path)
@@ -28,7 +28,7 @@ async def create_files(*, session: SessionDep, current_user: CurrentUser, file: 
             f.write(res)
             f.close()
     except Exception as e:
-        return {"message": "您的文件格式不是图片，不能解析！"}
+        return {"message": "您的文件格式不能解析！"}
     finally:
         f.close()
     ocr = PaddleOCR(use_angle_cls=True, lang="ch")
@@ -47,4 +47,8 @@ async def create_files(*, session: SessionDep, current_user: CurrentUser, file: 
     session.add(item)
     session.commit()
     session.refresh(item)
+
+    # remove local file
+    os.remove(localUrl)
+    
     return item
