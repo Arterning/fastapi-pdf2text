@@ -10,11 +10,14 @@ import {
   FormErrorMessage,
   FormLabel,
   Icon,
+  Progress,
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 import { FiFile } from "react-icons/fi";
 import FileUpload from "../../components/file-upload";
 import { request } from "../../client/core/request";
+import React from "react";
+import useCustomToast from "../../hooks/useCustomToast";
 
 export const Route = createFileRoute("/_layout/upload")({
   component: UploadPage,
@@ -25,6 +28,11 @@ type FormValues = {
 };
 
 function UploadPage() {
+
+  const [uploading, setUploading] = React.useState(false);
+
+  const showToast = useCustomToast();
+
   const {
     register,
     handleSubmit,
@@ -32,6 +40,8 @@ function UploadPage() {
   } = useForm<FormValues>();
   const onSubmit = handleSubmit(async (data) => {
     console.log("On Submit: ", data.file_[0]);
+
+    setUploading(true);
 
     //upload file to server
     const response = await request(OpenAPI, {
@@ -45,6 +55,10 @@ function UploadPage() {
         422: `Validation Error`,
       },
     });
+
+    setUploading(false);
+
+    showToast("Success!", "File uploaded successfully.", "success");
 
     console.log("Response: ", response);
   });
@@ -83,9 +97,17 @@ function UploadPage() {
             </FormErrorMessage>
           </FormControl>
 
-          <Button mt={4} type="submit">
+          <Button mt={4} type="submit" disabled={uploading}>
             Submit
           </Button>
+
+          {
+            uploading
+            && (
+              <Progress mt={5} width={"300px"} size="xs" hasStripe isIndeterminate/>
+            )
+          }
+          
         </form>
       </Box>
     </Container>
