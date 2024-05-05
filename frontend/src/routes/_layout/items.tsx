@@ -36,7 +36,9 @@ function ItemsTableBody() {
         <Tr key={item.id}>
           <Td>{item.id}</Td>
           <Td>{item.title}</Td>
-          <Td color={!item.description ? "ui.dim" : "inherit"}>
+          <Td color={!item.description ? "ui.dim" : "inherit"}
+            overflow={"hidden"} maxW={"200px"}
+            textOverflow={"ellipsis"}>
             {item.description || "N/A"}
           </Td>
           <Td>

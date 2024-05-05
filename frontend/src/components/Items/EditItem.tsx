@@ -11,6 +11,7 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Textarea,
 } from "@chakra-ui/react"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { type SubmitHandler, useForm } from "react-hook-form"
@@ -96,11 +97,10 @@ const EditItem = ({ item, isOpen, onClose }: EditItemProps) => {
             </FormControl>
             <FormControl mt={4}>
               <FormLabel htmlFor="description">Description</FormLabel>
-              <Input
+              <Textarea
                 id="description"
                 {...register("description")}
                 placeholder="Description"
-                type="text"
               />
             </FormControl>
           </ModalBody>
