@@ -11,9 +11,11 @@ async def create_file(file: bytes = File()):
     return {"file_size": len(file)}
 
 
+from app.models import Item, ItemPublic, ItemCreate
+from app.api.deps import CurrentUser, SessionDep
 
-@router.post("/pdf/")
-async def create_files(file: UploadFile = File(...)):
+@router.post("/pdf/", response_model=ItemPublic)
+async def create_files(*, session: SessionDep, current_user: CurrentUser, file: UploadFile = File(...)):
     filename = str(time.time()) + "_" + file.filename
     path = 'C:/Users/china/working/course-group/ocr-examples'
     localUrl = path + filename
@@ -40,4 +42,9 @@ async def create_files(file: UploadFile = File(...)):
         for line in res:
             oneline = line[1][0]
             content += oneline + '\n'
-    return {"message": content}
+    item_create = ItemCreate(title=filename, description=content)
+    item = Item.model_validate(item_create, update={"owner_id": current_user.id})
+    session.add(item)
+    session.commit()
+    session.refresh(item)
+    return item
